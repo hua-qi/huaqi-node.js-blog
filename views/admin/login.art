@@ -1,0 +1,44 @@
+<!-- 继承布局骨架 -->
+{{extend './common/layout.art'}}
+<!-- 标识 main block -->
+{{block 'main'}}
+<div class="login-body">
+    <div class="login-container">
+        <h4 class="title">huaqi - 博客管理员登录</h4>
+        <div class="login">
+            <form action="/admin/login" method="POST" id="loginForm">
+                <div class="form-group">
+                    <label>邮箱</label>
+                    <input name="email" type="email" class="form-control" placeholder="请输入邮件地址">
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input name="password" autocomplete='off' type="password" class="form-control" placeholder="请输入密码">
+                </div>
+                <input type="hidden" name="aid" value="{{aid ? aid : ''}}">
+                <button type="submit" class="btn btn-primary">登录</button>
+            </form>
+        </div>
+        <div class="tips"></div>
+    </div>
+</div>
+{{/block}}
+<!-- 标识 scrpit block -->
+{{block 'script'}}
+<script type="text/javascript">
+    // 为表单添加提交事件
+    $('#loginForm').on('submit', function() {
+        let result = serializeToJson($(this));
+        // console.log(result);
+        // trim() 方法 去除空格
+        let emailLength = result.email.trim().length;
+        let passwordLength = result.password.trim().length;
+        if (emailLength == 0 || passwordLength == 0) {
+            alert('请确认是否输入邮箱地址或密码');
+            // return 空 会阻止当前代码的执行，之后的 return false 不会执行，没有达到验证的效果
+            // return false 既停止当前代码 也返回false 组织信息向服务端传递 (即阻止了浏览的默认行为)
+            return false;
+        };
+    });
+</script>
+{{/block}}

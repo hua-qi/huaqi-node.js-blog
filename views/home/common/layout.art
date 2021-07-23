@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8"> {{block 'title'}} {{/block}}
+    <link rel="stylesheet" href="/home/css/base.css">
+</head>
+
+<body>
+    {{block 'main'}} {{/block}}
+</body>
+
+</html>

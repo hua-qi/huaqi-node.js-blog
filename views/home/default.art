@@ -1,0 +1,53 @@
+<!-- 继承布局骨架 -->
+{{extend './common/layout.art'}}
+<!-- 标识 title block -->
+{{block 'title'}}
+<title>首页</title>
+<link rel="stylesheet" href="/home/css/index.css"> {{/block}}
+<!-- 标识 main block -->
+{{block 'main'}}
+<!-- 头部框架开始 -->
+{{include './common/header'}}
+<!-- 头部框架结束 -->
+<!-- 文章列表开始 -->
+<ul class="list w1100">
+    {{each articles.records}}
+    <li class="{{$index%2 == 0 ? 'fl' : 'fr'}}">
+        <a href="/home/article?aid={{@$value._id}}" class="thumbnail">
+            <img src="{{$value.cover}}">
+        </a>
+        <div class="content">
+            <a class="article-title" href="/home/article?aid={{@$value._id}}">{{$value.title}}</a>
+            <div class="article-info">
+                <span class="author">{{$value.author.username}}</span>
+                <!-- dateFormat 模板的时间处理工具 -->
+                <span>{{dateFormat($value.publishDate,'yyyy-mm-dd')}}</span>
+            </div>
+            <div class="brief">
+                <!-- replace(param1,param2) param1:待替换的字符 param2:替换的目标值 -->
+                <!-- 正则表达式： 全部标签 -->
+                <!-- substr(param1,param2) param1:从何处开始计数 param2: 共截取多少字符 -->
+                <!-- <%- ：原文输出 -->
+                {{@ $value.content.substr(0,90) + '...' }}
+            </div>
+        </div>
+    </li>
+    {{/each}}
+</ul>
+<!-- 文章列表结束 -->
+
+<!-- 分页开始 -->
+<div class="page w1100">
+    <!-- 进行判断：当前页是否为第一页 -->
+    {{if articles.page > 1}}
+    <a href="/home?page={{articles.page - 1}}">上一页</a> {{/if}}
+    <!-- 页数渲染 -->
+    {{each articles.display}}
+    <a href="/home?page={{$value}}" class="{{articles.page == $value ? 'active' : ''}}">{{$value}}</a> {{/each}}
+    <!-- 进行判断：当前页是否为最后一页 -->
+    {{if articles.page != articles.pages}}
+    <a href="/home?page={{articles.page - 0 + 1}}">下一页</a> {{/if}}
+
+</div>
+<!-- 分页结束 -->
+{{/block}}

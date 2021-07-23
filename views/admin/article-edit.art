@@ -1,0 +1,113 @@
+<!-- 继承布局骨架 -->
+{{extend './common/layout.art'}}
+<!-- 标识 main block -->
+{{block 'main'}}
+<!-- 头部 -->
+{{include './common/header.art'}}
+<!-- /头部 -->
+<!-- 主体内容 -->
+<div class="content">
+    <!-- 侧边栏 -->
+    {{include './common/aside.art'}}
+    <!-- 侧边栏 -->
+    <div class="main">
+        <!-- 分类标题 -->
+        <div class="title">
+            <h4>用户id：{{@userInfo._id}}</h4>
+            <p class="tips">{{message}}</p>
+        </div>
+        <!-- /分类标题 -->
+
+        <!-- 
+            enctype 指定表单数据的编码类型
+            默认： application/x-www-form-urlencoded 
+            数据编码后样式： name=zhangsan&age=20
+                   mutipart/form-data 
+            将表单数据编码为 二进制
+         -->
+        <form class="form-container" action="{{link}}" method="POST" enctype="multipart/form-data" id="editForm">
+            <div class="form-group">
+                <label>标题</label>
+                <input type="text" class="form-control" placeholder="请输入文章标题" name="title" value="{{article && article.title}}">
+            </div>
+            <div class="form-group">
+                <label>作者</label>
+                <input type="text" class="form-control" readonly name="author" value="{{@userInfo._id}}">
+            </div>
+            <div class="form-group">
+                <label>发布时间</label>
+                <input type="date" class="form-control" name="publishDate" value="{{article && dateFormat(article.publishDate,'yyyy-mm-dd')}}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputFile">文章封面</label>
+                <!--属性 multiple，允许一次性选取多个文件  -->
+                <input type="file" name="cover" id="coverImg" value="{{article && article.cover}}">
+                <div class="thumbnail-waper">
+                    <img class="img-thumbnail" src="{{article && article.cover}}" id="preview">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>内容</label>
+                <textarea class="form-control" id="editor" name="content">{{article && article.content}}</textarea>
+            </div>
+            <div class="buttons">
+                <input type="submit" class="btn btn-primary" value="{{btnTxt}}">
+            </div>
+        </form>
+
+    </div>
+</div>
+<!-- /主体内容 -->
+{{/block}}
+<!-- 标识 script block -->
+{{block 'script'}}
+<script src="/admin/lib/ckeditor5/ckeditor.js"></script>
+<script type="text/javascript">
+    let editor;
+
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .then(newEditor => {
+            editor = newEditor;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+    // 获取数据
+    // const editorData = editor.getData();
+
+    // 选择文件上传控件
+    let coverImg = document.querySelector('#coverImg');
+    let preview = document.querySelector('#preview');
+    // 文件选择完成之后
+    coverImg.onchange = function() {
+        // 1.创建文件读取对象
+        let reader = new FileReader();
+        // 用户选择的文件列表
+        // console.log(this.files[0]);
+        // 2.读取文件
+        reader.readAsDataURL(this.files[0]);
+        // 3.监听 onload 事件
+        reader.onload = () => {
+            console.log(reader.result);
+            // 将文件读取的结果显示在页面上
+            preview.src = reader.result;
+        };
+
+    };
+    // 为表单添加提交事件
+    $('editForm').on('submit', function() {
+        let result = serializeToJson($(this));
+        // console.log(result);
+        // trim() 方法 去除空格
+        let titleLength = result.title.trim();
+
+        if (titleLength == 0) {
+            alert('未填入标题');
+            return false;
+        }
+    });
+</script>
+{{/block}}

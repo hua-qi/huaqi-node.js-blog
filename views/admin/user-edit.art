@@ -1,0 +1,80 @@
+<!-- 继承布局骨架 -->
+{{extend './common/layout.art'}}
+<!-- 标识 main block -->
+{{block 'main'}}
+<!-- 子模版的相对路径是当前文件 是由模板引擎解析 -->
+<!-- 头部 -->
+{{include './common/header.art'}}
+<!-- /头部 -->
+<!-- 主体内容 -->
+<div class="content">
+    <!-- 侧边栏 -->
+    {{include './common/aside.art'}}
+    <!-- /侧边栏 -->
+    <div class="main">
+        <!-- 分类标题 -->
+        <div class="title">
+            <h4>{{userId}}</h4>
+            <p class="tips">{{message}}</p>
+        </div>
+        <!-- /分类标题 -->
+        <form class="form-container" id="editForm" action="{{link}}" method="POST">
+            <div class="form-group">
+                <label>用户名</label>
+                <input name="username" type="text" class="form-control" placeholder="请输入用户名" value="{{user && user.username}}">
+            </div>
+            <div class="form-group">
+                <label>邮箱</label>
+                <input name="email" type="email" class="form-control" placeholder="请输入邮箱地址" value="{{user && user.email}}">
+            </div>
+            <div class="form-group">
+                <label>{{btnTxt == '修改' ? '身份验证' : '密码'}}</label>
+                <input autocomplete="false" name="password" type="password" class="form-control" placeholder="请输入密码">
+            </div>
+            <div class="form-group">
+                <label>角色</label>
+                <select class="form-control" name="role">
+                        <option value="normal" {{user && user.role == 'normal' ? 'selected' : ''}}>普通用户</option>
+                        <option value="admin" {{user && user.role == 'admin' ? 'selected' : ''}}>超级管理员</option>
+                    </select>
+            </div>
+            <div class="form-group">
+                <label>状态</label>
+                <select class="form-control" name="state">
+                        <option value="0" {{user && user.state == '0' ? 'selected' : ''}}>启用</option>
+                        <option value="1" {{user && user.state == '1' ? 'selected' : ''}}>禁用</option>
+                    </select>
+            </div>
+            <div class="buttons">
+                <input type="submit" class="btn btn-primary" value="{{btnTxt}}">
+            </div>
+        </form>
+    </div>
+</div>
+<!-- /主体内容 -->
+{{/block}} {{block 'script'}}
+<script type="text/javascript">
+    // 为表单添加提交事件
+    $('#editForm').on('submit', function() {
+        let result = serializeToJson($(this));
+        // console.log(result);
+        // trim() 方法 去除空格
+        let usernameLength = result.username.trim().length;
+        let emailLength = result.email.trim().length;
+        let passwordLength = result.password.trim().length;
+        if (usernameLength == 0) {
+            alert('未填入用户名');
+            // return 空 会阻止当前代码的执行，之后的 return false 不会执行，没有达到验证的效果
+            // return false 既停止当前代码 也返回false 组织信息向服务端传递 (即阻止了浏览的默认行为)
+            return false;
+        } else if (emailLength == 0) {
+            alert('未填入邮箱地址');
+            return false;
+
+        } else if (passwordLength == 0) {
+            alert('未填入密码');
+            return false;
+        };
+    });
+</script>
+{{/block}}

@@ -1,0 +1,33 @@
+{
+    "name": "blog",
+    "version": "1.0.0",
+    "description": "nodejs博客实战项目",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "node.js",
+        "express",
+        "mongoose",
+        "mongodb",
+        "art-template"
+    ],
+    "author": "huaqi",
+    "license": "ISC",
+    "dependencies": {
+        "art-template": "^4.13.2",
+        "bcryptjs": "^2.4.3",
+        "config": "^3.3.6",
+        "dateformat": "^4.5.1",
+        "express": "^4.17.1",
+        "express-art-template": "^1.0.1",
+        "express-session": "^1.17.2",
+        "formidable": "^1.2.2",
+        "joi": "^17.4.0",
+        "mongoose": "^5.13.2",
+        "mongoose-sex-page": "^1.2.4",
+        "morgan": "^1.10.0",
+        "nodemon": "^2.0.12"
+    }
+}
