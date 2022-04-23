@@ -2,7 +2,7 @@
 const express = require('express');
 // 引入路径处理
 const path = require('path');
-// 引入express-session 模块z
+// 引入express-session 模块
 const session = require('express-session');
 // 导入 art-template 模板引擎
 const template = require('art-template');
@@ -20,7 +20,7 @@ const app = express();
 require('./model/connect');
 
 // 处理POST请求参数 (extended false  默认使用 querrString 处理字符串)
-// 不能处理 form-datal 即 二进制 数据
+// 不能处理 form-data 即 二进制 数据
 app.use(express.urlencoded({ extended: false }));
 
 // 配置session
